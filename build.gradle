@@ -1,0 +1,27 @@
+allprojects {
+    apply plugin: 'eclipse'
+    apply plugin: 'idea'
+    apply plugin: 'checkstyle'
+
+    version = '0.0.1-SNAPSHOT'
+}
+
+subprojects {
+    apply plugin: 'java'
+    apply plugin: 'findbugs'
+    apply plugin: 'pmd'
+    apply plugin: 'jacoco'
+
+    ext {
+        springBootVersion = '1.5.6.RELEASE'
+        springCloudVersion = 'Dalston.SR2'
+    }
+
+    group = 'com.company.app'
+
+    sourceCompatibility = 1.8
+
+    compileJava { options.fork = true }
+
+    apply from: '../gradle/analysisAndStyle.gradle'
+}

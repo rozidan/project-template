@@ -1,0 +1,109 @@
+buildscript {
+    repositories {
+        mavenCentral()
+        maven { url 'http://repo.spring.io/plugins-release' }
+    }
+    dependencies {
+        classpath("org.springframework.boot:spring-boot-gradle-plugin:${springBootVersion}")
+        classpath('io.spring.gradle:propdeps-plugin:0.0.9.RELEASE')
+    }
+}
+
+apply plugin: 'io.spring.dependency-management'
+apply plugin: 'propdeps'
+apply plugin: 'propdeps-maven'
+apply plugin: 'propdeps-idea'
+apply plugin: 'propdeps-eclipse'
+apply plugin: 'maven'
+apply plugin: 'signing'
+
+archivesBaseName = "template-client"
+
+repositories { mavenCentral() }
+
+dependencies {
+    compile('com.fasterxml.jackson.core:jackson-annotations')
+    compile('org.springframework.boot:spring-boot-starter')
+    compile('org.springframework.data:spring-data-commons')
+    compile('org.springframework:spring-web')
+    compile('org.springframework.boot:spring-boot-starter-validation')
+
+    compileOnly('io.springfox:springfox-swagger2:2.7.0')
+    compileOnly('org.projectlombok:lombok')
+
+    optional('org.springframework.boot:spring-boot-configuration-processor')
+
+    testCompile('com.fasterxml.jackson.core:jackson-databind')
+    testCompile('org.springframework.boot:spring-boot-starter-test')
+}
+
+compileJava.dependsOn(processResources)
+
+dependencyManagement {
+    imports { mavenBom("org.springframework.boot:spring-boot-dependencies:${springBootVersion}") }
+}
+
+
+task javadocJar(type: Jar) {
+    classifier = 'javadoc'
+    from javadoc
+}
+
+task sourcesJar(type: Jar) {
+    classifier = 'sources'
+    from sourceSets.main.allSource
+}
+
+artifacts { archives javadocJar, sourcesJar }
+
+signing {
+    required { !version.endsWith("SNAPSHOT") && gradle.taskGraph.hasTask(uploadArchives) }
+    sign configurations.archives
+}
+
+
+uploadArchives {
+    repositories {
+        mavenDeployer {
+            beforeDeployment { MavenDeployment deployment -> signing.signPom(deployment) }
+
+            repository(url: "release repo") {
+                authentication(userName: rootProject.hasProperty('mavenUsername') ? rootProject.mavenUsername : '',
+                        password: rootProject.hasProperty('mavenPassword') ? rootProject.mavenPassword : '')
+            }
+
+            snapshotRepository(url: "snapshot repo") {
+                authentication(userName: rootProject.hasProperty('mavenUsername') ? rootProject.mavenUsername : '',
+                        password: rootProject.hasProperty('mavenPassword') ? rootProject.mavenPassword : '')
+            }
+
+            pom.project {
+                name 'Spring Boot Template Starter'
+                packaging 'jar'
+                description 'Spring boot starter for Template'
+                url 'https://server.com/group/spring-boot-starter-template.git'
+
+                scm {
+                    connection 'scm:git:https://server.com/group/spring-boot-starter-template.git'
+                    developerConnection 'scm:git:https://server.com/group/spring-boot-starter-template.git'
+                    url 'https://server.com/group/spring-boot-starter-template.git'
+                }
+
+                licenses {
+                    license {
+                        name 'The Apache License, Version 2.0'
+                        url 'http://www.apache.org/licenses/LICENSE-2.0.txt'
+                    }
+                }
+
+                developers {
+                    developer {
+                        id 'userId'
+                        name 'user name'
+                        email 'user@email.com'
+                    }
+                }
+            }
+        }
+    }
+}

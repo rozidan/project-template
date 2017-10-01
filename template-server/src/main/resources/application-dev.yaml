@@ -1,0 +1,12 @@
+spring:
+
+  jpa:
+    show-sql: true
+
+    hibernate:
+      ddl-auto: create-drop
+
+logging:
+  level:
+    root: info
+    com.company.app: debug

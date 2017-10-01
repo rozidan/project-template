@@ -1,0 +1,4 @@
+rootProject.name = 'template'
+
+include 'template-client'
+include 'template-server'

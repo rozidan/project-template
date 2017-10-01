@@ -1,0 +1,21 @@
+spring:
+
+  datasource:
+    url: jdbc:mariadb://maria:3306/app?createDatabaseIfNotExist=true
+    username: root
+    password: root
+
+  jpa:
+    show-sql: false
+
+    hibernate:
+      ddl-auto: validate
+
+logging:
+  file: logs/app.log
+  level:
+    root: info
+    com.company.app: info
+
+flyway:
+  enabled: true

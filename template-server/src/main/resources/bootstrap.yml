@@ -1,0 +1,7 @@
+spring:
+  application.name: app
+  cloud:
+    config:
+      uri: https://configuration:8080
+      failFast: false
+      #enabled: false
