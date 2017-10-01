@@ -1,7 +1,7 @@
 # Project-template
 > A spring-boot template project
 
-> This s a spring-boot template project consisting of two components:
+This s a spring-boot template project consisting of two components:
 * Service: A runnable service.
 * Client: A client project that can be imported to other services for the purpose of communicating between the Services, contains REST calls and DTO's.
 
@@ -21,7 +21,7 @@ The service template contains the following:
 * Auditable entity
 * `AttributeConverter` example for enum values
 * Data unique constrant configuration that automaticlly catch by error handler
-* Handlers example for the following exceptions:
+* Handler exampleד for the following exceptions:
     * `EmptyResultDataAccessException`
     * `DataIntegrityViolationException`
     * `HttpMessageNotReadableException`
