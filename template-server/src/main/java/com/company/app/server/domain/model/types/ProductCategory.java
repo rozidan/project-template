@@ -3,9 +3,9 @@ package com.company.app.server.domain.model.types;
 import com.company.app.client.EnumUtils;
 import com.company.app.client.IdentifierType;
 
+import java.util.Objects;
 import javax.persistence.AttributeConverter;
 import javax.persistence.Converter;
-import java.util.Objects;
 
 /**
  * @author Idan Rozenfeld

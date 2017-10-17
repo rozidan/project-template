@@ -17,7 +17,7 @@ tasks.withType(FindBugs) {
     }
 }
 
-checkstyle { toolVersion '8.1' }
+checkstyle { toolVersion '8.3' }
 
 tasks.withType(Checkstyle) {
     ignoreFailures true
