@@ -23,6 +23,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 import springfox.documentation.annotations.ApiIgnore;
@@ -94,5 +95,15 @@ public class ProductController {
     @GetMapping("/avg")
     public float productPriceAvg() {
         return productService.getProductPriceAvg();
+    }
+
+    @ApiOperation("Query product from catalog")
+    @ApiResponses({
+            @ApiResponse(code = 201, message = "Product has been query from catalog"),
+            @ApiResponse(code = 404, message = "Product not found")})
+    @ResponseStatus(HttpStatus.OK)
+    @GetMapping("/query")
+    public ProductDto query(@RequestParam long id) {
+        return productService.get(id);
     }
 }

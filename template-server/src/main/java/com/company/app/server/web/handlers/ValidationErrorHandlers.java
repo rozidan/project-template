@@ -9,10 +9,12 @@ import org.springframework.core.annotation.Order;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.converter.HttpMessageNotReadableException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
+import org.springframework.web.bind.MissingServletRequestParameterException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
+import java.util.Collections;
 import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -51,6 +53,16 @@ public class ValidationErrorHandlers {
         return new ErrorDto.ErrorDtoBuilder<ValidationErrorDto>()
                 .errorCode(ErrorCodes.DATA_VALIDATION)
                 .errors(errors)
+                .build();
+    }
+
+    @Loggable
+    @ResponseStatus(code = HttpStatus.CONFLICT)
+    @ExceptionHandler(MissingServletRequestParameterException.class)
+    public ErrorDto<String> handleMissingServletRequestParameterError(MissingServletRequestParameterException ex) {
+        return new ErrorDto.ErrorDtoBuilder<String>()
+                .errorCode(ErrorCodes.MISSING_REQUEST_PARAM)
+                .errors(Collections.singleton(ex.getParameterName()))
                 .build();
     }
 }

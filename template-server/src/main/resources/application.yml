@@ -18,7 +18,7 @@ spring:
 
 server:
   context-path: /app
-  port: 8080
+  port: 8081
 
 security:
   basic:
