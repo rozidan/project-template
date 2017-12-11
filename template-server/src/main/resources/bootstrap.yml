@@ -1,5 +1,5 @@
 spring:
-  application.name: app
+  application.name: template
   cloud:
     config:
       uri: https://configuration:8080

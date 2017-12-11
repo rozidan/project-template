@@ -1,2 +1,2 @@
 org.springframework.boot.autoconfigure.EnableAutoConfiguration=\
-com.company.app.client.config.RestClientAutoConfiguration
+com.company.template.client.config.RestClientAutoConfiguration

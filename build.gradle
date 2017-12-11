@@ -17,7 +17,7 @@ subprojects {
         springCloudVersion = 'Dalston.SR4'
     }
 
-    group = 'com.company.app'
+    group = 'com.company.template'
 
     sourceCompatibility = 1.8
 

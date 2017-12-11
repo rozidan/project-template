@@ -104,5 +104,5 @@ task buildImage(type: DockerBuildImage) {
     description = 'Builds an image from a Dockerfile.'
     pull true
     inputDir = createDockerfile.destFile.parentFile
-    tag = 'app' + ': ' + version
+    tag = 'template' + ': ' + version
 }

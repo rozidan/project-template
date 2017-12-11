@@ -1,7 +1,7 @@
 spring:
 
   datasource:
-    url: jdbc:mariadb://maria:3306/app?createDatabaseIfNotExist=true
+    url: jdbc:mariadb://maria:3306/template?createDatabaseIfNotExist=true
     username: root
     password: root
 
@@ -12,10 +12,10 @@ spring:
       ddl-auto: validate
 
 logging:
-  file: logs/app.log
+  file: logs/template.log
   level:
     root: info
-    com.company.app: info
+    com.company.template: info
 
 flyway:
   enabled: true

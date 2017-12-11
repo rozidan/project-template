@@ -17,8 +17,8 @@ spring:
     serialization.write-dates-as-timestamps: false
 
 server:
-  context-path: /app
-  port: 8081
+  context-path: /template
+  port: 8080
 
 security:
   basic:
@@ -27,7 +27,7 @@ security:
 logging:
   level:
     root: info
-    com.company.app: debug
+    com.company.template: debug
 
 flyway:
   enabled: false
@@ -39,9 +39,9 @@ levelog:
 
 spring.boot.admin:
   url: http://mng:8080/mng/
-  client.health-url: http://app:8080/app/mng/health/
-  client.management-url: http://app:8080/app/mng/
-  client.service-url: http://app:8080/app/
+  client.health-url: http://template:8080/template/mng/health/
+  client.management-url: http://template:8080/template/mng/
+  client.service-url: http://template:8080/template/
 
 management:
   context-path: /mng
