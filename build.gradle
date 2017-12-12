@@ -13,8 +13,8 @@ subprojects {
     apply plugin: 'jacoco'
 
     ext {
-        springBootVersion = '1.5.7.RELEASE'
-        springCloudVersion = 'Dalston.SR4'
+        springBootVersion = '1.5.9.RELEASE'
+        springCloudVersion = 'Edgware.RELEASE'
     }
 
     group = 'com.company.template'

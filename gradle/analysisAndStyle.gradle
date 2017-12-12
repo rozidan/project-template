@@ -2,13 +2,12 @@ tasks.withType(Pmd) {
     ignoreFailures true
     reports {
         xml.enabled true
-        html.enabled true
+        html.enabled false
     }
 }
 
 tasks.withType(FindBugs) {
     ignoreFailures true
-    exclude '**/*.json'
     effort 'max'
     reportLevel 'low'
     reports {
@@ -17,7 +16,7 @@ tasks.withType(FindBugs) {
     }
 }
 
-checkstyle { toolVersion '8.3' }
+checkstyle { toolVersion '8.5' }
 
 tasks.withType(Checkstyle) {
     ignoreFailures true
@@ -25,7 +24,7 @@ tasks.withType(Checkstyle) {
     configFile '../gradle/checkstyle.xml' as File
     reports {
         xml.enabled true
-        html.enabled true
+        html.enabled false
     }
 }
 
@@ -37,6 +36,6 @@ test {
 jacocoTestReport {
     reports {
         xml.enabled true
-        html.enabled true
+        html.enabled false
     }
 }

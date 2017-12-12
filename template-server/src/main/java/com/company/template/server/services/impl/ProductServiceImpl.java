@@ -4,6 +4,7 @@ import com.company.template.client.web.dtos.ProductDto;
 import com.company.template.server.domain.model.Product;
 import com.company.template.server.domain.repositories.ProductRepository;
 import com.company.template.server.services.ProductService;
+import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.EmptyResultDataAccessException;
@@ -18,6 +19,7 @@ import java.util.stream.Collectors;
 /**
  * @author Idan Rozenfeld
  */
+@Slf4j
 @Service
 public class ProductServiceImpl implements ProductService {
 
@@ -53,6 +55,7 @@ public class ProductServiceImpl implements ProductService {
 
     @Override
     public ProductDto get(long id) {
+        log.info("get service");
         Product product = repository.findOne(id)
                 .orElseThrow(() -> new EmptyResultDataAccessException("No product found with id: " + id, 1));
         return mapper.map(product, ProductDto.class);
