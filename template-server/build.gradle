@@ -5,18 +5,12 @@ buildscript {
     }
     dependencies {
         classpath("org.springframework.boot:spring-boot-gradle-plugin:${springBootVersion}")
-        classpath('com.bmuschko:gradle-docker-plugin:3.0.8')
-        classpath('io.spring.gradle:propdeps-plugin:0.0.9.RELEASE')
     }
 }
 
 apply plugin: 'io.spring.dependency-management'
 apply plugin: 'org.springframework.boot'
-apply plugin: 'com.bmuschko.docker-remote-api'
-apply plugin: 'propdeps'
-apply plugin: 'propdeps-maven'
-apply plugin: 'propdeps-idea'
-apply plugin: 'propdeps-eclipse'
+apply from: '../gradle/docker.gradle'
 
 archivesBaseName = "template-server"
 
@@ -61,60 +55,4 @@ dependencyManagement {
     }
 }
 
-if (!project.hasProperty('devtoolsEnabled')) {
-    project.ext.devtoolsEnabled = true
-}
-
-if (!project.hasProperty('dockerUrl')) {
-    project.ext.dockerUrl = 'dockerUrlValue'
-}
-
 bootRepackage.excludeDevtools = !devtoolsEnabled
-
-import com.bmuschko.gradle.docker.tasks.image.DockerBuildImage
-import com.bmuschko.gradle.docker.tasks.image.Dockerfile
-
-docker { url = dockerUrl }
-
-task createDockerfile(type: Dockerfile) {
-    group = 'docker'
-    description = 'Creates a Dockerfile based on the provided instructions.'
-    from 'openjdk:8-jre-alpine'
-    runCommand 'apk update curl && apk add curl'
-    maintainer 'maintainer'
-    volume("/tmp")
-    environmentVariable('PROFILE', '""')
-    addFile('"' + jar.archiveName.toString() + '"', '"app.jar"')
-    Integer[] ports = [8080]
-    if (devtoolsEnabled) {
-        ports += 8000
-    }
-    exposePort(ports)
-    String[] entries = [
-            'java',
-            '-Djava.security.egd=file:/dev/./urandom'
-    ]
-    if (devtoolsEnabled) {
-        entries += [
-                '-Xdebug',
-                "-Xrunjdwp:server=y,transport=dt_socket,suspend=n,address=8000"
-        ]
-    }
-    entries += ['-jar', '/app.jar']
-    entryPoint(entries)
-    defaultCommand('--spring.profiles.active=${PROFILE}')
-    doFirst {
-        copy {
-            from jar
-            into "build/docker"
-        }
-    }
-}
-
-task buildImage(type: DockerBuildImage) {
-    group = 'docker'
-    description = 'Builds an image from a Dockerfile.'
-    pull true
-    inputDir = createDockerfile.destFile.parentFile
-    tag = 'template' + ': ' + version
-}

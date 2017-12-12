@@ -4,6 +4,10 @@ allprojects {
     apply plugin: 'checkstyle'
 
     version = '0.0.1-SNAPSHOT'
+
+    if (!project.hasProperty('devtoolsEnabled')) {
+        project.ext.devtoolsEnabled = true
+    }
 }
 
 subprojects {
@@ -24,4 +28,9 @@ subprojects {
     compileJava { options.fork = true }
 
     apply from: '../gradle/analysisAndStyle.gradle'
+
+    if (!project.hasProperty('devtoolsEnabled')) {
+        project.ext.devtoolsEnabled = false
+    }
+
 }

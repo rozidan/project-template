@@ -1,0 +1,61 @@
+buildscript {
+    repositories {
+        jcenter()
+    }
+    dependencies {
+        classpath 'com.bmuschko:gradle-docker-plugin:3.1.0'
+    }
+}
+
+apply plugin: com.bmuschko.gradle.docker.DockerRemoteApiPlugin
+
+if (!project.hasProperty('dockerUrl')) {
+    project.ext.dockerUrl = 'dockerUrlValue'
+}
+
+import com.bmuschko.gradle.docker.tasks.image.*
+
+docker { url = dockerUrl }
+
+task createDockerfile(type: Dockerfile) {
+    group = 'docker'
+    description = 'Creates a Dockerfile based on the provided instructions.'
+    from 'openjdk:8-jre-alpine'
+    runCommand 'apk update curl && apk add curl'
+    maintainer 'maintainer'
+    volume("/tmp")
+    environmentVariable('PROFILE', '""')
+    addFile('"' + jar.archiveName.toString() + '"', '"app.jar"')
+    Integer[] ports = [8080]
+    if (devtoolsEnabled.toBoolean()) {
+        ports += 8000
+    }
+    exposePort(ports)
+    String[] entries = [
+            'java',
+            '-Djava.security.egd=file:/dev/./urandom'
+    ]
+    if (devtoolsEnabled.toBoolean()) {
+        entries += [
+                '-Xdebug',
+                "-Xrunjdwp:server=y,transport=dt_socket,suspend=n,address=8000"
+        ]
+    }
+    entries += ['-jar', '/app.jar']
+    entryPoint(entries)
+    defaultCommand('--spring.profiles.active=${PROFILE}')
+    doFirst {
+        copy {
+            from jar
+            into "build/docker"
+        }
+    }
+}
+
+task buildImage(type: DockerBuildImage) {
+    group = 'docker'
+    description = 'Builds an image from a Dockerfile.'
+    pull true
+    inputDir = createDockerfile.destFile.parentFile
+    tag = 'template' + ': ' + version
+}
