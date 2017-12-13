@@ -1,5 +1,0 @@
-signing.keyId = "33FF33"
-signing.password = "password"
-signing.secretKeyRingFile = "../secretKey.gpg"
-mavenUsername = "username"
-mavenPassword = "paswword"

@@ -55,4 +55,6 @@ dependencyManagement {
     }
 }
 
-bootRepackage.excludeDevtools = !devtoolsEnabled
+bootRepackage {
+    excludeDevtools = !rootProject.devtoolsEnabled
+}

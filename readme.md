@@ -40,3 +40,18 @@ The client template contains the following:
 * Error DTO's examples
 * Auto configuration of client API
 * Auto configuration of `RestTemplate` that can be override
+
+### Available gradle task parameters:
+| Task | Property name | Mandatory | Default Value |
+|------|---------------|-----------|---------------|
+|Maven |signing.keyId  |Y          |               |
+|Maven |signing.password  |Y          |            |
+|Maven |signing.secretKeyRingFile  |Y       |      |
+|Maven |mavenUsername  |Y          |               |
+|Maven |mavenPassword  |Y          |               |
+|Docker |devtoolsEnabled  |Y          |   false            |
+|Docker |dockerUrl  |Y          |  see [bmuschko gradle-docker-plugin](https://github.com/bmuschko/gradle-docker-plugin)             |
+
+### Project Name
+* Replace all ['template', 'company'] references with your own
+*  

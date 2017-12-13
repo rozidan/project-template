@@ -2,12 +2,6 @@ allprojects {
     apply plugin: 'eclipse'
     apply plugin: 'idea'
     apply plugin: 'checkstyle'
-
-    version = '0.0.1-SNAPSHOT'
-
-    if (!project.hasProperty('devtoolsEnabled')) {
-        project.ext.devtoolsEnabled = true
-    }
 }
 
 subprojects {
@@ -15,6 +9,7 @@ subprojects {
     apply plugin: 'findbugs'
     apply plugin: 'pmd'
     apply plugin: 'jacoco'
+    apply from: '../gradle/analysisAndStyle.gradle'
 
     ext {
         springBootVersion = '1.5.9.RELEASE'
@@ -23,14 +18,11 @@ subprojects {
 
     group = 'com.company.template'
 
-    sourceCompatibility = 1.8
+    sourceCompatibility = JavaVersion.VERSION_1_8
 
     compileJava { options.fork = true }
+}
 
-    apply from: '../gradle/analysisAndStyle.gradle'
-
-    if (!project.hasProperty('devtoolsEnabled')) {
-        project.ext.devtoolsEnabled = false
-    }
-
+if (!project.hasProperty('devtoolsEnabled')) {
+    project.ext.devtoolsEnabled = false
 }
