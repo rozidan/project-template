@@ -19,7 +19,6 @@ task createDockerfile(type: Dockerfile) {
     group = 'docker'
     description = 'Creates a Dockerfile based on the provided instructions.'
     from 'openjdk:8-jre-alpine'
-    runCommand 'apk update curl && apk add curl'
     maintainer 'maintainer'
     volume("/tmp")
     environmentVariable('PROFILE', '""')
@@ -51,6 +50,7 @@ task createDockerfile(type: Dockerfile) {
 }
 
 task buildImage(type: DockerBuildImage) {
+    dependsOn build, createDockerfile
     group = 'docker'
     description = 'Builds an image from a Dockerfile.'
     pull true

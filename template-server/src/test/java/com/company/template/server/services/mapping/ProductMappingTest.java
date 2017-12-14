@@ -16,7 +16,7 @@ import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.is;
 
 @RunWith(SpringRunner.class)
-@WithModelMapper(basePackageClasses = mappingBasePackage.class)
+@WithModelMapper(basePackageClasses = MappingBasePackage.class)
 public class ProductMappingTest {
 
     @Autowired

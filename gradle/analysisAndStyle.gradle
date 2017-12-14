@@ -7,6 +7,10 @@ tasks.withType(Pmd) {
 }
 
 tasks.withType(FindBugs) {
+    exclude '**/META-INF/**'
+    classes = classes.filter {
+        !it.path.contains(new File("META-INF/").path)
+    }
     ignoreFailures true
     effort 'max'
     reportLevel 'low'

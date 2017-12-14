@@ -1,4 +1,4 @@
 package com.company.template.server.services.mapping;
 
-public final class mappingBasePackage {
+public final class MappingBasePackage {
 }

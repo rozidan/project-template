@@ -4,10 +4,7 @@ import com.company.template.server.domain.model.Product;
 import com.company.template.server.domain.model.types.ProductCategory;
 import com.company.template.server.domain.repositories.ProductRepository;
 import com.company.template.server.services.impl.ProductServiceImpl;
-import com.company.template.server.services.mapping.mappingBasePackage;
-import com.company.template.server.domain.repositories.ProductRepository;
-import com.company.template.server.services.impl.ProductServiceImpl;
-import com.company.template.server.services.mapping.mappingBasePackage;
+import com.company.template.server.services.mapping.MappingBasePackage;
 import com.github.rozidan.springboot.modelmapper.testing.WithModelMapper;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -24,7 +21,7 @@ import static org.hamcrest.Matchers.is;
 import static org.mockito.Mockito.when;
 
 @RunWith(SpringRunner.class)
-@WithModelMapper(basePackageClasses = mappingBasePackage.class)
+@WithModelMapper(basePackageClasses = MappingBasePackage.class)
 @ContextConfiguration(classes = ProductServiceImpl.class)
 public class ProductServiceTest {
 
