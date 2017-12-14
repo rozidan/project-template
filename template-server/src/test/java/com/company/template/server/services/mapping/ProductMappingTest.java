@@ -4,7 +4,7 @@ import com.company.template.client.web.dtos.ProductDto;
 import com.company.template.client.web.dtos.types.ProductCategoryDto;
 import com.company.template.server.domain.model.Product;
 import com.company.template.server.domain.model.types.ProductCategory;
-import com.github.rozidan.springboot.modelmapper.testing.WithModelMapper;
+import com.github.rozidan.springboot.modelmapper.WithModelMapper;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.modelmapper.ModelMapper;
