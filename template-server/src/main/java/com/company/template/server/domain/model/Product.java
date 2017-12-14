@@ -13,18 +13,10 @@ import lombok.Setter;
 import lombok.ToString;
 import org.hibernate.validator.constraints.NotEmpty;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.Lob;
-import javax.persistence.SequenceGenerator;
-import javax.persistence.Table;
-import javax.persistence.UniqueConstraint;
-import javax.persistence.Version;
+import javax.persistence.*;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
+import java.util.Set;
 
 /**
  * @author Idan Rozenfeld
@@ -63,5 +55,6 @@ public class Product extends AuditableEntity {
 
     private ProductCategory category;
 
-
+    @ElementCollection
+    Set<ProductCatalog> catalogs;
 }

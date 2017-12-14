@@ -16,6 +16,7 @@ import org.hibernate.validator.constraints.NotEmpty;
 
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
+import java.util.Set;
 
 /**
  * @author Idan Rozenfeld
@@ -52,4 +53,5 @@ public class ProductDto extends AuditableDto {
     @NotNull
     private ProductCategoryDto category;
 
+    Set<ProductCatalogDto> catalogs;
 }
