@@ -1,12 +1,11 @@
 package com.company.template.server.domain.repositories;
 
 import com.company.template.server.domain.model.Product;
+import java.util.List;
+import java.util.Optional;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.repository.RepositoryDefinition;
-
-import java.util.List;
-import java.util.Optional;
 
 /**
  * @author Idan Rozenfeld

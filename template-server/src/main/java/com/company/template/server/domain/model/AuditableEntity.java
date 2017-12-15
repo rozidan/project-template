@@ -1,5 +1,8 @@
 package com.company.template.server.domain.model;
 
+import java.util.Date;
+import javax.persistence.EntityListeners;
+import javax.persistence.MappedSuperclass;
 import lombok.AllArgsConstructor;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
@@ -10,10 +13,6 @@ import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedBy;
 import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
-
-import java.util.Calendar;
-import javax.persistence.EntityListeners;
-import javax.persistence.MappedSuperclass;
 
 /**
  * @author Idan Rozenfeld
@@ -30,11 +29,11 @@ public class AuditableEntity {
     private String createdBy;
 
     @CreatedDate
-    private Calendar createdDate;
+    private Date createdDate;
 
     @LastModifiedBy
     private String lastModifiedBy;
 
     @LastModifiedDate
-    private Calendar lastModifiedDate;
+    private Date lastModifiedDate;
 }

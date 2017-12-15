@@ -1,65 +1,30 @@
 package com.company.template.client.web.dtos.errors;
 
 import io.swagger.annotations.ApiModel;
-import io.swagger.annotations.ApiModelProperty;
-import lombok.Data;
-import lombok.EqualsAndHashCode;
-import org.springframework.data.auditing.CurrentDateTimeProvider;
-
 import java.io.Serializable;
-import java.util.Calendar;
+import java.util.Date;
 import java.util.Set;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.Setter;
+import org.springframework.data.auditing.CurrentDateTimeProvider;
 
 /**
  * @author Idan Rozenfeld
  */
 @ApiModel("Error")
-@Data
-@EqualsAndHashCode(of = {"errorCode", "timestamp"})
-public class ErrorDto<T> implements Serializable {
+@Getter
+@Setter
+@Builder
+public class ErrorDto implements Serializable {
+    private static final long serialVersionUID = -4708936233513887899L;
 
-    private static final long serialVersionUID = 1L;
-
-    @ApiModelProperty(readOnly = true)
     private Enum<?> errorCode;
 
-    @ApiModelProperty(readOnly = true)
-    private Calendar timestamp;
+    private String message;
 
-    @ApiModelProperty(allowEmptyValue = true)
-    private Set<T> errors;
+    @Builder.Default
+    private Date timestamp = CurrentDateTimeProvider.INSTANCE.getNow().getTime();
 
-    public static class ErrorDtoBuilder<T> {
-        private Enum<?> errorCode;
-        private Calendar timestamp;
-        private Set<T> errors;
-
-        public ErrorDtoBuilder() {
-            timestamp = CurrentDateTimeProvider.INSTANCE.getNow();
-        }
-
-        public ErrorDtoBuilder<T> errorCode(Enum<?> errorCode) {
-            this.errorCode = errorCode;
-            return this;
-        }
-
-        public ErrorDtoBuilder<T> timestamp(Calendar timestamp) {
-            this.timestamp = timestamp;
-            return this;
-        }
-
-        public ErrorDtoBuilder<T> errors(Set<T> errors) {
-            this.errors = errors;
-            return this;
-        }
-
-        public ErrorDto<T> build() {
-            ErrorDto<T> errorDto = new ErrorDto<>();
-            errorDto.setErrorCode(errorCode);
-            errorDto.setErrors(errors);
-            errorDto.setTimestamp(timestamp);
-
-            return errorDto;
-        }
-    }
+    private Set<Object> errors;
 }

@@ -3,6 +3,9 @@ package com.company.template.client.api;
 import com.company.template.client.config.RestClientProperties;
 import com.company.template.client.web.dtos.ProductDto;
 import com.company.template.client.web.dtos.RestPageImpl;
+import java.net.URI;
+import java.util.HashMap;
+import java.util.Map;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.data.domain.Page;
@@ -12,10 +15,6 @@ import org.springframework.http.HttpMethod;
 import org.springframework.stereotype.Component;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.util.UriComponentsBuilder;
-
-import java.net.URI;
-import java.util.HashMap;
-import java.util.Map;
 
 /**
  * @author Idan Rozenfeld
@@ -39,9 +38,7 @@ public class ProductRestClient {
     }
 
     public Page<ProductDto> list(Pageable pageable) {
-        ParameterizedTypeReference<RestPageImpl<ProductDto>> ptr =
-                new ParameterizedTypeReference<RestPageImpl<ProductDto>>() {
-                };
+        ParameterizedTypeReference<RestPageImpl<ProductDto>> ptr = new RestPageTypeReference<>();
 
         URI targetUrl = UriComponentsBuilder.fromUriString(productPath)
                 .queryParam("page", pageable.getPageNumber())

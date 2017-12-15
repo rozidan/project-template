@@ -4,6 +4,8 @@ import com.company.template.client.web.dtos.ProductDto;
 import com.company.template.server.domain.model.Product;
 import com.company.template.server.domain.repositories.ProductRepository;
 import com.company.template.server.services.ProductService;
+import java.util.List;
+import java.util.stream.Collectors;
 import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,9 +14,6 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
-import java.util.List;
-import java.util.stream.Collectors;
 
 /**
  * @author Idan Rozenfeld

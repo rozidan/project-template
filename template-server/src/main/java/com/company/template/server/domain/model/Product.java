@@ -1,9 +1,21 @@
 package com.company.template.server.domain.model;
 
-import com.company.template.server.domain.model.Constraints.ProductNameUnique;
+import com.company.template.server.domain.model.constraints.ProductNameUnique;
 import com.company.template.server.domain.model.types.ProductCategory;
-import com.company.template.server.domain.model.Constraints.ProductNameUnique;
-import com.company.template.server.domain.model.types.ProductCategory;
+import java.util.Set;
+import javax.persistence.Column;
+import javax.persistence.ElementCollection;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.Lob;
+import javax.persistence.SequenceGenerator;
+import javax.persistence.Table;
+import javax.persistence.UniqueConstraint;
+import javax.persistence.Version;
+import javax.validation.constraints.Min;
+import javax.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.EqualsAndHashCode;
@@ -12,11 +24,6 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
 import org.hibernate.validator.constraints.NotEmpty;
-
-import javax.persistence.*;
-import javax.validation.constraints.Min;
-import javax.validation.constraints.NotNull;
-import java.util.Set;
 
 /**
  * @author Idan Rozenfeld
@@ -56,5 +63,5 @@ public class Product extends AuditableEntity {
     private ProductCategory category;
 
     @ElementCollection
-    Set<ProductCatalog> catalogs;
+    private Set<ProductCatalog> catalogs;
 }

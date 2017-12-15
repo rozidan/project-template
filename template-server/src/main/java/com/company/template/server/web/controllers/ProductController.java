@@ -3,7 +3,6 @@ package com.company.template.server.web.controllers;
 import com.company.template.client.web.dtos.ProductDto;
 import com.company.template.client.web.dtos.errors.ErrorDto;
 import com.company.template.server.services.ProductService;
-import com.company.template.server.services.ProductService;
 import com.github.rozidan.springboot.logger.Loggable;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;

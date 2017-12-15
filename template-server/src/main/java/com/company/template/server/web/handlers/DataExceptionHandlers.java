@@ -3,9 +3,11 @@ package com.company.template.server.web.handlers;
 import com.company.template.client.web.dtos.ErrorCodes;
 import com.company.template.client.web.dtos.errors.ErrorDto;
 import com.company.template.client.web.dtos.errors.ValidationErrorDto;
-import com.company.template.server.domain.model.Constraints.DataUniqueConstraint;
-import com.company.template.server.domain.model.Constraints.DataUniqueConstraint;
+import com.company.template.server.domain.model.constraints.DataUniqueConstraint;
 import com.github.rozidan.springboot.logger.Loggable;
+import java.util.Collections;
+import java.util.List;
+import java.util.Optional;
 import org.hibernate.exception.ConstraintViolationException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.Ordered;
@@ -16,10 +18,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
-
-import java.util.Collections;
-import java.util.List;
-import java.util.Optional;
 
 /**
  * @author Idan Rozenfeld
@@ -38,29 +36,34 @@ public class DataExceptionHandlers {
     @Loggable
     @ResponseStatus(code = HttpStatus.NOT_FOUND)
     @ExceptionHandler(EmptyResultDataAccessException.class)
-    public ErrorDto<Void> handleEmptyResultDataAccessException(EmptyResultDataAccessException ex) {
-        return new ErrorDto.ErrorDtoBuilder<Void>().errorCode(ErrorCodes.NOT_FOUND).build();
+    public ErrorDto handleEmptyResultDataAccessException(EmptyResultDataAccessException ex) {
+        return ErrorDto.builder()
+                .errorCode(ErrorCodes.NOT_FOUND)
+                .message(ex.getLocalizedMessage())
+                .build();
     }
 
     @Loggable
     @ResponseStatus(code = HttpStatus.CONFLICT)
     @ExceptionHandler(DataIntegrityViolationException.class)
-    public ErrorDto<ValidationErrorDto> handleDataIntegrityViolationException(DataIntegrityViolationException ex) {
+    public ErrorDto handleDataIntegrityViolationException(DataIntegrityViolationException ex) {
         if (uniqueConstraintList != null && ex.getCause() != null && ex.getCause() instanceof ConstraintViolationException) {
             Optional<DataUniqueConstraint> matchCons = uniqueConstraintList.stream().filter((cons) ->
                     ((ConstraintViolationException) ex.getCause()).getConstraintName().contains(cons.getConstraintName())).findFirst();
             if (matchCons.isPresent()) {
-                return new ErrorDto.ErrorDtoBuilder<ValidationErrorDto>()
+                return ErrorDto.builder()
                         .errorCode(ErrorCodes.DATA_VALIDATION)
                         .errors(Collections.singleton(ValidationErrorDto.builder()
                                 .errorCode("UNIQUE")
                                 .fieldName(matchCons.get().getFieldName()).build()))
+                        .message(ex.getLocalizedMessage())
                         .build();
             }
         }
 
-        return new ErrorDto.ErrorDtoBuilder<ValidationErrorDto>()
+        return ErrorDto.builder()
                 .errorCode(ErrorCodes.UNKNOWN)
+                .message(ex.getLocalizedMessage())
                 .build();
     }
 

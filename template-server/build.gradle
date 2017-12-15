@@ -20,7 +20,6 @@ repositories {
 }
 
 dependencies {
-    compile('de.codecentric:spring-boot-admin-starter-client:1.5.5')
     compile('org.springframework.boot:spring-boot-devtools')
     compile('org.springframework.cloud:spring-cloud-starter-config')
     compile('org.springframework.boot:spring-boot-starter-actuator')

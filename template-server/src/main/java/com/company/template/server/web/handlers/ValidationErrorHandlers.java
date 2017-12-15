@@ -4,6 +4,10 @@ import com.company.template.client.web.dtos.ErrorCodes;
 import com.company.template.client.web.dtos.errors.ErrorDto;
 import com.company.template.client.web.dtos.errors.ValidationErrorDto;
 import com.github.rozidan.springboot.logger.Loggable;
+import java.util.Collections;
+import java.util.Set;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 import org.springframework.core.Ordered;
 import org.springframework.core.annotation.Order;
 import org.springframework.http.HttpStatus;
@@ -13,11 +17,6 @@ import org.springframework.web.bind.MissingServletRequestParameterException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
-
-import java.util.Collections;
-import java.util.Set;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 /**
  * @author Idan Rozenfeld
@@ -29,14 +28,17 @@ public class ValidationErrorHandlers {
     @Loggable
     @ResponseStatus(code = HttpStatus.BAD_REQUEST)
     @ExceptionHandler(HttpMessageNotReadableException.class)
-    public ErrorDto<Void> handleNotReadableError(HttpMessageNotReadableException ex) {
-        return new ErrorDto.ErrorDtoBuilder<Void>().errorCode(ErrorCodes.REQUEST_NOT_READABLE).build();
+    public ErrorDto handleNotReadableError(HttpMessageNotReadableException ex) {
+        return ErrorDto.builder()
+                .errorCode(ErrorCodes.REQUEST_NOT_READABLE)
+                .message(ex.getLocalizedMessage())
+                .build();
     }
 
     @Loggable
     @ResponseStatus(code = HttpStatus.CONFLICT)
     @ExceptionHandler(MethodArgumentNotValidException.class)
-    public ErrorDto<ValidationErrorDto> handleValidationError(MethodArgumentNotValidException ex) {
+    public ErrorDto handleValidationError(MethodArgumentNotValidException ex) {
         Set<ValidationErrorDto> errors = ex.getBindingResult().getFieldErrors().stream()
                 .map(err -> ValidationErrorDto.builder()
                         .errorCode(err.getCode())
@@ -45,24 +47,26 @@ public class ValidationErrorHandlers {
                         .params(Stream.of(err.getArguments())
                                 .skip(1)
                                 .map(Object::toString)
-                                .collect(Collectors.toList())
-                                .toArray())
+                                .collect(Collectors.toList()))
+                        .message(err.getDefaultMessage())
                         .build())
                 .collect(Collectors.toSet());
 
-        return new ErrorDto.ErrorDtoBuilder<ValidationErrorDto>()
+        return ErrorDto.builder()
                 .errorCode(ErrorCodes.DATA_VALIDATION)
-                .errors(errors)
+                .errors(Collections.unmodifiableSet(errors))
+                .message(ex.getLocalizedMessage())
                 .build();
     }
 
     @Loggable
     @ResponseStatus(code = HttpStatus.CONFLICT)
     @ExceptionHandler(MissingServletRequestParameterException.class)
-    public ErrorDto<String> handleMissingServletRequestParameterError(MissingServletRequestParameterException ex) {
-        return new ErrorDto.ErrorDtoBuilder<String>()
+    public ErrorDto handleMissingServletRequestParameterError(MissingServletRequestParameterException ex) {
+        return ErrorDto.builder()
                 .errorCode(ErrorCodes.MISSING_REQUEST_PARAM)
                 .errors(Collections.singleton(ex.getParameterName()))
+                .message(ex.getLocalizedMessage())
                 .build();
     }
 }

@@ -2,7 +2,7 @@ tasks.withType(Pmd) {
     ignoreFailures true
     reports {
         xml.enabled true
-        html.enabled false
+        html.enabled true
     }
 }
 
@@ -15,8 +15,8 @@ tasks.withType(FindBugs) {
     effort 'max'
     reportLevel 'low'
     reports {
-        xml.enabled true
-        html.enabled false
+        xml.enabled false
+        html.enabled true
     }
 }
 
@@ -28,7 +28,7 @@ tasks.withType(Checkstyle) {
     configFile '../gradle/checkstyle.xml' as File
     reports {
         xml.enabled true
-        html.enabled false
+        html.enabled true
     }
 }
 
@@ -40,6 +40,6 @@ test {
 jacocoTestReport {
     reports {
         xml.enabled true
-        html.enabled false
+        html.enabled true
     }
 }

@@ -6,19 +6,23 @@ import com.company.template.client.web.dtos.types.ProductCategoryDto;
 import com.company.template.server.domain.model.Product;
 import com.company.template.server.domain.model.types.ProductCategory;
 import com.github.rozidan.springboot.modelmapper.WithModelMapper;
+import java.util.Arrays;
+import java.util.HashSet;
+import java.util.Set;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.junit4.SpringRunner;
 
-import java.util.Collections;
-import java.util.HashSet;
-import java.util.Set;
-
 import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.*;
+import static org.hamcrest.Matchers.allOf;
+import static org.hamcrest.Matchers.containsInAnyOrder;
 import static org.hamcrest.Matchers.equalTo;
+import static org.hamcrest.Matchers.hasProperty;
+import static org.hamcrest.Matchers.hasSize;
+import static org.hamcrest.Matchers.is;
+
 
 @RunWith(SpringRunner.class)
 @WithModelMapper(basePackageClasses = MappingBasePackage.class)
@@ -51,11 +55,11 @@ public class ProductMappingTest {
         assertThat(result.getCategory(), is(equalTo(ProductCategory.CLOTHING)));
         assertThat(result.getDesc(), is(equalTo("Desc")));
         assertThat(result.getCatalogs(), hasSize(2));
-        assertThat(result.getCatalogs(), containsInAnyOrder(
+        assertThat(result.getCatalogs(), containsInAnyOrder(Arrays.asList(
                 allOf(hasProperty("id", is(equalTo(45))),
                         hasProperty("name", is(equalTo("C1")))),
                 allOf(hasProperty("id", is(equalTo(12))),
-                        hasProperty("name", is(equalTo("D2"))))
+                        hasProperty("name", is(equalTo("D2")))))
         ));
     }
 }

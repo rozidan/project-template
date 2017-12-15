@@ -1,11 +1,14 @@
 package com.company.template.client;
 
+import lombok.experimental.UtilityClass;
+
 /**
  * @author Idan Rozenfeld
  */
-public final class EnumUtils {
+@UtilityClass
+public class EnumUtils {
 
-    public static <T, E extends Enum<E> & IdentifierType<T>> E getByValue(final Class<E> enumClass, T value) {
+    public <T, E extends Enum<E> & IdentifierType<T>> E getByValue(final Class<E> enumClass, T value) {
         for (final E e : enumClass.getEnumConstants()) {
             if (e.getValue().equals(value)) {
                 return e;

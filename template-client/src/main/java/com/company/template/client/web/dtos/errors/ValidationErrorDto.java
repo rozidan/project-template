@@ -1,37 +1,31 @@
 package com.company.template.client.web.dtos.errors;
 
 import io.swagger.annotations.ApiModel;
-import io.swagger.annotations.ApiModelProperty;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.EqualsAndHashCode;
-import lombok.NoArgsConstructor;
-
 import java.io.Serializable;
+import java.util.List;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.Setter;
+import lombok.Singular;
 
 /**
  * @author Idan Rozenfeld
  */
 @ApiModel("ValidationError")
-@Data
-@NoArgsConstructor
-@AllArgsConstructor
+@Getter
+@Setter
 @Builder
-@EqualsAndHashCode(of = {"fieldName", "errorCode"})
 public class ValidationErrorDto implements Serializable {
+    private static final long serialVersionUID = 6692364309366067411L;
 
-    private static final long serialVersionUID = 1L;
-
-    @ApiModelProperty(readOnly = true)
     private String fieldName;
 
-    @ApiModelProperty(readOnly = true)
     private String errorCode;
 
-    @ApiModelProperty(readOnly = true)
     private Object rejectedValue;
 
-    @ApiModelProperty(readOnly = true)
-    private Object[] params;
+    @Singular
+    private List<Object> params;
+
+    private String message;
 }

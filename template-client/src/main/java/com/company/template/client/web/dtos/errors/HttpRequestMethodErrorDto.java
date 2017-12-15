@@ -1,22 +1,26 @@
 package com.company.template.client.web.dtos.errors;
 
 import io.swagger.annotations.ApiModel;
-import lombok.AllArgsConstructor;
+import java.io.Serializable;
+import java.util.List;
 import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.Getter;
+import lombok.Setter;
+import lombok.Singular;
+import org.springframework.http.HttpMethod;
 
 /**
  * @author Idan Rozenfeld
  */
 @ApiModel("HttpRequestMethodError")
-@Data
-@NoArgsConstructor
-@AllArgsConstructor
+@Getter
+@Setter
 @Builder
-public class HttpRequestMethodErrorDto {
-    private static final long serialVersionUID = 1L;
+public class HttpRequestMethodErrorDto implements Serializable {
+    private static final long serialVersionUID = 4115067500106084449L;
 
     private String actualMethod;
-    private String[] supportedMethods;
+
+    @Singular
+    private List<HttpMethod> supportedMethods;
 }

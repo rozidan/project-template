@@ -1,8 +1,13 @@
 package com.company.template.server.domain.model;
 
-import lombok.*;
-
 import javax.persistence.Embeddable;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.EqualsAndHashCode;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+import lombok.ToString;
 
 /**
  * @author Idan Rozenfeld

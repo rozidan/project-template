@@ -4,12 +4,9 @@ import com.company.template.client.web.dtos.ErrorCodes;
 import com.company.template.client.web.dtos.ProductDto;
 import com.company.template.client.web.dtos.types.ProductCategoryDto;
 import com.company.template.server.config.JsonConfiguration;
-import com.company.template.server.domain.model.Constraints.ProductNameUnique;
+import com.company.template.server.domain.model.constraints.ProductNameUnique;
 import com.company.template.server.services.ProductService;
 import com.company.template.server.web.controllers.ProductController;
-import com.company.template.server.config.JsonConfiguration;
-import com.company.template.server.domain.model.Constraints.ProductNameUnique;
-import com.company.template.server.services.ProductService;
 import com.fasterxml.jackson.databind.ObjectWriter;
 import org.hibernate.exception.ConstraintViolationException;
 import org.junit.Test;
@@ -84,7 +81,7 @@ public class ProductControllerTest {
     }
 
     @Test
-    public void catalogueValidationFailedWithEmptyName() throws Exception {
+    public void catalogueValidationFailedUniqueName() throws Exception {
         ProductDto request = ProductDto.builder()
                 .name("John")
                 .category(ProductCategoryDto.CLOTHING)
@@ -92,7 +89,8 @@ public class ProductControllerTest {
                 .build();
 
         when(service.catalogue(any(ProductDto.class)))
-                .thenThrow(new DataIntegrityViolationException("", new ConstraintViolationException("", null, ProductNameUnique.CONSTRAINT_NAME)));
+                .thenThrow(new DataIntegrityViolationException("",
+                        new ConstraintViolationException("", null, ProductNameUnique.CONSTRAINT_NAME)));
         mvc.perform(post("/products")
                 .content(writer.writeValueAsString(request))
                 .contentType(MediaType.APPLICATION_JSON))
@@ -108,7 +106,7 @@ public class ProductControllerTest {
     }
 
     @Test
-    public void catalogueValidationFailedUniqueName() throws Exception {
+    public void catalogueValidationFailedWithEmptyName() throws Exception {
         ProductDto request = ProductDto.builder()
                 .name("")
                 .category(ProductCategoryDto.CLOTHING)

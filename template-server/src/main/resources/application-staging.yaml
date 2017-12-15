@@ -19,3 +19,7 @@ logging:
 
 flyway:
   enabled: true
+
+levelog:
+  kafka:
+    enabled: true

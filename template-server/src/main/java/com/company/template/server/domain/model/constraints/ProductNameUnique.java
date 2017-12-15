@@ -1,4 +1,4 @@
-package com.company.template.server.domain.model.Constraints;
+package com.company.template.server.domain.model.constraints;
 
 import org.springframework.stereotype.Component;
 

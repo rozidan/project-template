@@ -5,6 +5,9 @@ import com.company.template.client.web.dtos.types.ProductCategoryDto;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
+import java.util.Set;
+import javax.validation.constraints.Min;
+import javax.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.EqualsAndHashCode;
@@ -13,10 +16,6 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
 import org.hibernate.validator.constraints.NotEmpty;
-
-import javax.validation.constraints.Min;
-import javax.validation.constraints.NotNull;
-import java.util.Set;
 
 /**
  * @author Idan Rozenfeld
@@ -30,8 +29,7 @@ import java.util.Set;
 @ToString(callSuper = true)
 @EqualsAndHashCode(of = "id", callSuper = true)
 public class ProductDto extends AuditableDto {
-
-    private static final long serialVersionUID = 1L;
+    private static final long serialVersionUID = 5762617605382814204L;
 
     @ApiModelProperty(allowEmptyValue = true)
     private Long id;
@@ -53,5 +51,5 @@ public class ProductDto extends AuditableDto {
     @NotNull
     private ProductCategoryDto category;
 
-    Set<ProductCatalogDto> catalogs;
+    private Set<ProductCatalogDto> catalogs;
 }
