@@ -2,6 +2,9 @@ allprojects {
     apply plugin: 'eclipse'
     apply plugin: 'idea'
     apply plugin: 'checkstyle'
+
+    group = 'com.company.template'
+    version = '1.0.0-SNAPSHOT'
 }
 
 subprojects {
@@ -16,9 +19,14 @@ subprojects {
         springCloudVersion = 'Edgware.RELEASE'
     }
 
-    group = 'com.company.template'
-
     sourceCompatibility = JavaVersion.VERSION_1_8
+
+    jar {
+        manifest {
+            attributes("Implementation-Title": project.name,
+                    "Implementation-Version": version)
+        }
+    }
 
     compileJava { options.fork = true }
 }

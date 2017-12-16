@@ -17,8 +17,6 @@ apply plugin: 'propdeps-eclipse'
 apply plugin: 'maven'
 apply plugin: 'signing'
 
-archivesBaseName = "template-client"
-
 repositories { mavenCentral() }
 
 dependencies {

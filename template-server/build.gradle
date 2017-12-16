@@ -12,8 +12,6 @@ apply plugin: 'io.spring.dependency-management'
 apply plugin: 'org.springframework.boot'
 apply from: '../gradle/docker.gradle'
 
-archivesBaseName = "template-server"
-
 repositories {
     mavenCentral()
     maven { url "https://oss.sonatype.org/content/groups/public" }
