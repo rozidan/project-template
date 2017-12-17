@@ -41,6 +41,9 @@ dependencyManagement {
     imports {
         mavenBom("org.springframework.boot:spring-boot-dependencies:${springBootVersion}")
     }
+    dependencies {
+        dependency 'com.google.guava:guava:23.5-jre'
+    }
 }
 
 
@@ -61,18 +64,17 @@ signing {
     sign configurations.archives
 }
 
-
 uploadArchives {
     repositories {
         mavenDeployer {
             beforeDeployment { MavenDeployment deployment -> signing.signPom(deployment) }
 
-            repository(url: "release repo") {
+            repository(url: rootProject.hasProperty('mavenRepo') ? rootProject.mavenRepo : '') {
                 authentication(userName: rootProject.hasProperty('mavenUsername') ? rootProject.mavenUsername : '',
                         password: rootProject.hasProperty('mavenPassword') ? rootProject.mavenPassword : '')
             }
 
-            snapshotRepository(url: "snapshot repo") {
+            snapshotRepository(url: rootProject.hasProperty('mavenRepoSnapshot') ? rootProject.mavenRepoSnapshot : '') {
                 authentication(userName: rootProject.hasProperty('mavenUsername') ? rootProject.mavenUsername : '',
                         password: rootProject.hasProperty('mavenPassword') ? rootProject.mavenPassword : '')
             }

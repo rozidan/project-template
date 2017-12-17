@@ -44,13 +44,15 @@ The client template contains the following:
 ### Available gradle task parameters:
 | Task | Property name | Mandatory | Default Value |
 |------|---------------|-----------|---------------|
-|Maven |signing.keyId  |Y          |               |
-|Maven |signing.password  |Y          |            |
-|Maven |signing.secretKeyRingFile  |Y       |      |
-|Maven |mavenUsername  |Y          |               |
-|Maven |mavenPassword  |Y          |               |
-|Docker |devtoolsEnabled  |Y          |   false            |
-|Docker |dockerUrl  |Y          |  see [bmuschko gradle-docker-plugin](https://github.com/bmuschko/gradle-docker-plugin)             |
+|Maven |signing.keyId|Y|                           |
+|Maven |signing.password|Y|                 |
+|Maven |signing.secretKeyRingFile|Y|      |
+|Maven |mavenRepo|Y|                        |
+|Maven |mavenRepoSnapshot|Y|                 |
+|Maven |mavenUsername|Y|                     |
+|Maven |mavenPassword|Y|                     |
+|Docker |devtools|Y|false|
+|Docker |dockerUrl|Y|see [bmuschko gradle-docker-plugin](https://github.com/bmuschko/gradle-docker-plugin)|
 
 ### Project Name
 * Replace all ['template', 'company'] references with your own

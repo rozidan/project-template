@@ -24,7 +24,7 @@ task createDockerfile(type: Dockerfile) {
     environmentVariable('PROFILE', '""')
     addFile('"' + jar.archiveName.toString() + '"', '"app.jar"')
     Integer[] ports = [8080]
-    if (rootProject.devtoolsEnabled.toBoolean()) {
+    if (rootProject.devtools.toBoolean()) {
         ports += 8000
     }
     exposePort(ports)
@@ -32,7 +32,7 @@ task createDockerfile(type: Dockerfile) {
             'java',
             '-Djava.security.egd=file:/dev/./urandom'
     ]
-    if (rootProject.devtoolsEnabled.toBoolean()) {
+    if (rootProject.devtools.toBoolean()) {
         entries += [
                 '-Xdebug',
                 "-Xrunjdwp:server=y,transport=dt_socket,suspend=n,address=8000"
@@ -55,5 +55,5 @@ task buildImage(type: DockerBuildImage) {
     description = 'Builds an image from a Dockerfile.'
     pull true
     inputDir = createDockerfile.destFile.parentFile
-    tag = 'template'
+    tag = 'template:' + project.version
 }

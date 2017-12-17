@@ -24,13 +24,14 @@ subprojects {
     jar {
         manifest {
             attributes("Implementation-Title": project.name,
-                    "Implementation-Version": version)
+                    "Implementation-Version": project.version)
         }
     }
 
     compileJava { options.fork = true }
+
+    if (!rootProject.hasProperty('devtools')) {
+        rootProject.ext.devtools = false
+    }
 }
 
-if (!project.hasProperty('devtoolsEnabled')) {
-    project.ext.devtoolsEnabled = false
-}
