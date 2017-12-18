@@ -9,7 +9,7 @@ buildscript {
     }
 }
 
-apply plugin: 'io.spring.dependency-management'
+apply plugin: 'org.springframework.boot'
 apply plugin: 'propdeps'
 apply plugin: 'propdeps-maven'
 apply plugin: 'propdeps-idea'
@@ -37,15 +37,9 @@ dependencies {
 
 compileJava.dependsOn(processResources)
 
-dependencyManagement {
-    imports {
-        mavenBom("org.springframework.boot:spring-boot-dependencies:${springBootVersion}")
-    }
-    dependencies {
-        dependency 'com.google.guava:guava:23.5-jre'
-    }
+bootRepackage {
+    enabled = false
 }
-
 
 task javadocJar(type: Jar) {
     classifier = 'javadoc'
