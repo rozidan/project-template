@@ -25,6 +25,8 @@ subprojects {
         }
     }
 
+    gradle.startParameter.excludedTaskNames += "license"
+
     compileJava { options.fork = true }
 
     if (!rootProject.hasProperty('devtools')) {
