@@ -1,7 +1,6 @@
 allprojects {
     apply plugin: 'eclipse'
     apply plugin: 'idea'
-    apply plugin: 'checkstyle'
 
     group = 'com.company.template'
     version = '1.0.0-SNAPSHOT'
@@ -9,9 +8,6 @@ allprojects {
 
 subprojects {
     apply plugin: 'java'
-    apply plugin: 'findbugs'
-    apply plugin: 'pmd'
-    apply plugin: 'jacoco'
     apply from: '../gradle/analysisAndStyle.gradle'
     apply from: '../gradle/license.gradle'
 

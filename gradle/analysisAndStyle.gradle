@@ -1,3 +1,14 @@
+buildscript {
+    repositories {
+        mavenCentral()
+    }
+}
+
+apply plugin: 'findbugs'
+apply plugin: 'pmd'
+apply plugin: 'jacoco'
+apply plugin: 'checkstyle'
+
 tasks.withType(Pmd) {
     ignoreFailures true
     reports {
