@@ -29,7 +29,7 @@ public class DataExceptionHandlers {
 
     private final List<DataUniqueConstraint> uniqueConstraintList;
 
-    @Autowired(required = false)
+    @Autowired
     public DataExceptionHandlers(List<DataUniqueConstraint> uniqueConstraintList) {
         this.uniqueConstraintList = uniqueConstraintList;
     }
@@ -54,12 +54,12 @@ public class DataExceptionHandlers {
             if (matchCons.isPresent()) {
                 return ErrorDto.builder()
                         .errorCode(ErrorCodes.DATA_VALIDATION)
-                        .errors(Arrays.stream(matchCons.get().getFieldNames())
-                                .map(field -> ValidationErrorDto.builder()
-                                        .errorCode("UNIQUE")
-                                        .fieldName(field)
-                                        .build())
-                                .collect(Collectors.toSet()))
+                        .error(ValidationErrorDto.builder()
+                                .errorCode("UNIQUE")
+                                .fieldName(Arrays.stream(matchCons.get().getFieldNames())
+                                        .map(Object::toString)
+                                        .collect(Collectors.joining(", ")))
+                                .build())
                         .message(ex.getLocalizedMessage())
                         .build();
             }
