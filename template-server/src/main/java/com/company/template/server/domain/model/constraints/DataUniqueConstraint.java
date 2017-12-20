@@ -4,5 +4,5 @@ public interface DataUniqueConstraint {
 
     String getConstraintName();
 
-    String getFieldName();
+    String[] getFieldNames();
 }

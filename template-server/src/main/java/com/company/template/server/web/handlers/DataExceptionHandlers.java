@@ -5,9 +5,10 @@ import com.company.template.client.web.dtos.errors.ErrorDto;
 import com.company.template.client.web.dtos.errors.ValidationErrorDto;
 import com.company.template.server.domain.model.constraints.DataUniqueConstraint;
 import com.github.rozidan.springboot.logger.Loggable;
-import java.util.Collections;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 import org.hibernate.exception.ConstraintViolationException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.Ordered;
@@ -53,9 +54,12 @@ public class DataExceptionHandlers {
             if (matchCons.isPresent()) {
                 return ErrorDto.builder()
                         .errorCode(ErrorCodes.DATA_VALIDATION)
-                        .errors(Collections.singleton(ValidationErrorDto.builder()
-                                .errorCode("UNIQUE")
-                                .fieldName(matchCons.get().getFieldName()).build()))
+                        .errors(Arrays.stream(matchCons.get().getFieldNames())
+                                .map(field -> ValidationErrorDto.builder()
+                                        .errorCode("UNIQUE")
+                                        .fieldName(field)
+                                        .build())
+                                .collect(Collectors.toSet()))
                         .message(ex.getLocalizedMessage())
                         .build();
             }

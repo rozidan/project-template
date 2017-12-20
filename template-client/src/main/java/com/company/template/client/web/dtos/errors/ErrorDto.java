@@ -7,6 +7,7 @@ import java.util.Set;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
+import lombok.Singular;
 import org.springframework.data.auditing.CurrentDateTimeProvider;
 
 /**
@@ -26,5 +27,6 @@ public class ErrorDto implements Serializable {
     @Builder.Default
     private Date timestamp = CurrentDateTimeProvider.INSTANCE.getNow().getTime();
 
+    @Singular
     private Set<Object> errors;
 }

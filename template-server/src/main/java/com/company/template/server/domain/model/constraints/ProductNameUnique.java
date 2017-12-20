@@ -14,7 +14,7 @@ public class ProductNameUnique implements DataUniqueConstraint {
     }
 
     @Override
-    public String getFieldName() {
-        return FIELD_NAME;
+    public String[] getFieldNames()  {
+        return new String[] {FIELD_NAME};
     }
 }
