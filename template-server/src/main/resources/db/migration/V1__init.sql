@@ -1,18 +1,18 @@
-create table IF NOT EXISTS product (
-`id` bigint not null,
-created_by varchar(255),
-created_date datetime,
-last_modified_by varchar(255),
-last_modified_date datetime,
-category varchar(255),
-`desc` longtext,
-name varchar(255) not null,
-unit_price float not null,
-`version` bigint not null,
-primary key (id),
-UNIQUE KEY `UK_opnl18c8phwl8gk0f7mao625d` (`name`)
+CREATE TABLE IF NOT EXISTS product (
+  `id`               BIGINT       NOT NULL,
+  created_by         VARCHAR(255),
+  created_date       DATETIME,
+  last_modified_by   VARCHAR(255),
+  last_modified_date DATETIME,
+  category           VARCHAR(255),
+  `desc`             LONGTEXT,
+  name               VARCHAR(255) NOT NULL,
+  unit_price         FLOAT        NOT NULL,
+  `version`          BIGINT       NOT NULL,
+  PRIMARY KEY (id),
+  UNIQUE KEY `UNIQUE_PRODUCT_NAME` (`name`)
 );
 
-CREATE TABLE  IF NOT EXISTS product_seq (
-next_val BIGINT(20) NULL DEFAULT NULL
+CREATE TABLE IF NOT EXISTS product_seq (
+  next_val BIGINT(20) NULL DEFAULT NULL
 ); 
