@@ -23,7 +23,6 @@ import static org.hamcrest.Matchers.hasProperty;
 import static org.hamcrest.Matchers.hasSize;
 import static org.hamcrest.Matchers.is;
 
-
 @RunWith(SpringRunner.class)
 @WithModelMapper(basePackageClasses = MappingBasePackage.class)
 public class ProductMappingTest {
