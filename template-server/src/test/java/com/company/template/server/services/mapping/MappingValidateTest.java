@@ -8,7 +8,6 @@ import org.modelmapper.ValidationException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.junit4.SpringRunner;
 
-import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
 
 @RunWith(SpringRunner.class)
@@ -22,7 +21,6 @@ public class MappingValidateTest {
     public void mapperValidationShouldSuccess() {
         try {
             mapper.validate();
-            assertTrue(true);
 
         } catch (ValidationException e) {
             fail(e.getMessage());
