@@ -8,7 +8,7 @@ import java.util.Objects;
  * @author Idan Rozenfeld
  */
 public enum ProductCategoryDto implements IdentifierType<String> {
-    GAME("G"), CLOTHING("Clth");
+    GAME("G"), CLOTHING("C");
 
     private final String id;
 

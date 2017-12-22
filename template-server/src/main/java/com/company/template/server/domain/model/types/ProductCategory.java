@@ -9,16 +9,16 @@ import javax.persistence.Converter;
 /**
  * @author Idan Rozenfeld
  */
-public enum ProductCategory implements IdentifierType<String> {
-    GAME("G"), CLOTHING("Clth");
+public enum ProductCategory implements IdentifierType<Integer> {
+    GAME(1), CLOTHING(2);
 
-    private final String id;
+    private final int id;
 
-    ProductCategory(String id) {
+    ProductCategory(int id) {
         this.id = id;
     }
 
-    public static ProductCategory byValue(String value) {
+    public static ProductCategory byValue(int value) {
         if (Objects.nonNull(value)) {
             return EnumUtils.getByValue(ProductCategory.class, value);
         }
@@ -27,15 +27,15 @@ public enum ProductCategory implements IdentifierType<String> {
     }
 
     @Override
-    public String getValue() {
+    public Integer getValue() {
         return id;
     }
 
     @Converter(autoApply = true)
-    public static class ProductCategoryConverter implements AttributeConverter<ProductCategory, String> {
+    public static class ProductCategoryConverter implements AttributeConverter<ProductCategory, Integer> {
 
         @Override
-        public String convertToDatabaseColumn(ProductCategory attribute) {
+        public Integer convertToDatabaseColumn(ProductCategory attribute) {
             if (Objects.nonNull(attribute)) {
                 return attribute.getValue();
             }
@@ -43,7 +43,7 @@ public enum ProductCategory implements IdentifierType<String> {
         }
 
         @Override
-        public ProductCategory convertToEntityAttribute(String dbData) {
+        public ProductCategory convertToEntityAttribute(Integer dbData) {
             if (Objects.nonNull(dbData)) {
                 return ProductCategory.byValue(dbData);
             }
