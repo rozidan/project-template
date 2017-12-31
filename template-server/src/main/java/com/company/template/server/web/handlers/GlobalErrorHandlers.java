@@ -69,7 +69,6 @@ public class GlobalErrorHandlers {
                 .build();
     }
 
-    @Loggable(LogLevel.ERROR)
     @ResponseStatus(code = HttpStatus.INTERNAL_SERVER_ERROR)
     @ExceptionHandler(Exception.class)
     public ErrorDto handleGlobalError(Exception ex) {
