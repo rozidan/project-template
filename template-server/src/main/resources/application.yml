@@ -1,8 +1,6 @@
 spring:
 
-
   jpa:
-
     hibernate:
       use-new-id-generator-mappings: true
       naming:
@@ -16,9 +14,6 @@ spring:
     serialization:
       write-dates-as-timestamps: false
 
-  resources:
-    add-mappings: false
-
 server:
   context-path: /template
   port: 8080
@@ -27,13 +22,6 @@ security:
   basic:
     enabled: false
 
-logging:
-  level:
-    root: info
-    com.company.template: info
-
-flyway:
-  enabled: false
-
 management:
   security.enabled: false
+
