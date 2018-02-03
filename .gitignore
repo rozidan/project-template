@@ -35,6 +35,7 @@ local.properties
 
 # STS (Spring Tool Suite)
 .springBeans
+**/.sts4-cache/
 
 # Code Recommenders
 .recommenders/
@@ -79,6 +80,14 @@ local.properties
 *.zip
 *.tar.gz
 *.rar
+
+### VisualStudioCode ###
+.vscode/*
+#!.vscode/settings.json
+#!.vscode/tasks.json
+#!.vscode/launch.json
+#!.vscode/extensions.json
+.history
 
 ### Gradle ###
 .gradle
