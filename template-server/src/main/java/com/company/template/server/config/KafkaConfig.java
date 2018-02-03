@@ -2,6 +2,7 @@ package com.company.template.server.config;
 
 import com.company.template.client.web.dtos.ProductDto;
 import com.company.template.server.domain.model.Product;
+
 import java.util.HashMap;
 import java.util.Map;
 import org.apache.kafka.clients.consumer.ConsumerConfig;

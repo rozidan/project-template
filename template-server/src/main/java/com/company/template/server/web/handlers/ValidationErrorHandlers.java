@@ -1,10 +1,14 @@
 package com.company.template.server.web.handlers;
 
-import com.company.template.client.web.dtos.ErrorCodes;
+import com.company.template.client.web.dtos.errors.ErrorCodes;
 import com.company.template.client.web.dtos.errors.ErrorDto;
+import com.company.template.client.web.dtos.errors.ValidationErrorCodes;
 import com.company.template.client.web.dtos.errors.ValidationErrorDto;
+import com.company.template.server.web.handlers.exceptions.UniqueFieldException;
 import com.github.rozidan.springboot.logger.Loggable;
+
 import java.util.Collections;
+import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -37,19 +41,39 @@ public class ValidationErrorHandlers {
 
     @Loggable
     @ResponseStatus(code = HttpStatus.CONFLICT)
+    @ExceptionHandler(UniqueFieldException.class)
+    public ErrorDto handleUniqueFieldExceptionError(UniqueFieldException ex) {
+        return ErrorDto.builder()
+                .errorCode(ErrorCodes.DATA_VALIDATION)
+                .error(ValidationErrorDto.builder()
+                        .errorCode(ValidationErrorCodes.UNIQUE.toString())
+                        .fieldName(ex.getField())
+                        .rejectedValue(ex.getRejectedValue())
+                        .message(ex.getLocalizedMessage())
+                        .build())
+                .message(ex.getLocalizedMessage())
+                .build();
+    }
+
+    @Loggable
+    @ResponseStatus(code = HttpStatus.CONFLICT)
     @ExceptionHandler(MethodArgumentNotValidException.class)
     public ErrorDto handleValidationError(MethodArgumentNotValidException ex) {
-        Set<ValidationErrorDto> errors = ex.getBindingResult().getFieldErrors().stream()
-                .map(err -> ValidationErrorDto.builder()
-                        .errorCode(err.getCode())
-                        .fieldName(err.getField())
-                        .rejectedValue(err.getRejectedValue())
-                        .params(Stream.of(err.getArguments())
-                                .skip(1)
-                                .map(Object::toString)
-                                .collect(Collectors.toList()))
-                        .message(err.getDefaultMessage())
-                        .build())
+        Set<ValidationErrorDto> errors = Stream.concat(
+                ex.getBindingResult().getFieldErrors().stream()
+                        .map(err -> ValidationErrorDto.builder()
+                                .errorCode(err.getCode())
+                                .fieldName(err.getField())
+                                .rejectedValue(err.getRejectedValue())
+                                .params(collectArguments(err.getArguments()))
+                                .message(err.getDefaultMessage())
+                                .build()),
+                ex.getBindingResult().getGlobalErrors().stream()
+                        .map(err -> ValidationErrorDto.builder()
+                                .errorCode(err.getCode())
+                                .params(collectArguments(err.getArguments()))
+                                .message(err.getDefaultMessage())
+                                .build()))
                 .collect(Collectors.toSet());
 
         return ErrorDto.builder()
@@ -57,6 +81,15 @@ public class ValidationErrorHandlers {
                 .errors(Collections.unmodifiableSet(errors))
                 .message(ex.getLocalizedMessage())
                 .build();
+    }
+
+    private List<String> collectArguments(Object[] arguments) {
+        return arguments == null ?
+                Collections.emptyList() :
+                Stream.of(arguments)
+                        .skip(1)
+                        .map(Object::toString)
+                        .collect(Collectors.toList());
     }
 
     @Loggable

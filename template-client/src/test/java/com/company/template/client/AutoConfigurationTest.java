@@ -2,6 +2,7 @@ package com.company.template.client;
 
 import com.company.template.client.api.ProductRestClient;
 import com.company.template.client.config.RestClientProperties;
+
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;

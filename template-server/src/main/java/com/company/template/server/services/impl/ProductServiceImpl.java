@@ -4,9 +4,9 @@ import com.company.template.client.web.dtos.ProductDto;
 import com.company.template.server.domain.model.Product;
 import com.company.template.server.domain.repositories.ProductRepository;
 import com.company.template.server.services.ProductService;
-import java.util.List;
-import java.util.stream.Collectors;
-import lombok.extern.slf4j.Slf4j;
+import com.company.template.server.web.handlers.exceptions.UniqueFieldException;
+
+import lombok.AllArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.EmptyResultDataAccessException;
@@ -18,26 +18,30 @@ import org.springframework.transaction.annotation.Transactional;
 /**
  * @author Idan Rozenfeld
  */
-@Slf4j
 @Service
+@AllArgsConstructor(onConstructor = @__({@Autowired}))
 public class ProductServiceImpl implements ProductService {
 
     private final ModelMapper mapper;
 
     private final ProductRepository repository;
 
-    @Autowired
-    public ProductServiceImpl(ModelMapper mapper, ProductRepository repository) {
-        this.mapper = mapper;
-        this.repository = repository;
+    @Override
+    @Transactional
+    public long catalogue(ProductDto productDto) {
+        checkUniqueName(null, productDto.getName());
+        Product product = mapper.map(productDto, Product.class);
+        Product newProd = repository.save(product);
+        return newProd.getId();
     }
+
 
     @Override
     @Transactional
-    public ProductDto catalogue(ProductDto productDto) {
-        Product product = mapper.map(productDto, Product.class);
-        Product newProd = repository.save(product);
-        return mapper.map(newProd, ProductDto.class);
+    public void replace(ProductDto productDto, long id) {
+        checkUniqueName(id, productDto.getName());
+        Product product = repository.findOne(id).orElseThrow(this::createEmptyResultException);
+        mapper.map(productDto, product);
     }
 
     @Override
@@ -49,24 +53,28 @@ public class ProductServiceImpl implements ProductService {
     @Override
     @Transactional
     public void remove(long id) {
-        repository.delete(id);
+        Product product = repository.findOne(id).orElseThrow(this::createEmptyResultException);
+        repository.delete(product);
     }
 
     @Override
     public ProductDto get(long id) {
-        log.info("get service");
-        Product product = repository.findOne(id)
-                .orElseThrow(() -> new EmptyResultDataAccessException("No product found with id: " + id, 1));
+        Product product = repository.findOne(id).orElseThrow(this::createEmptyResultException);
         return mapper.map(product, ProductDto.class);
     }
 
     @Override
     public float getProductPriceAvg() {
-        List<Product> products = repository.findAll();
-
-        return products.stream()
-                .map(Product::getUnitPrice)
-                .collect(Collectors.averagingDouble(avg -> avg)).floatValue();
+        return repository.getAverage();
     }
 
+    private EmptyResultDataAccessException createEmptyResultException() {
+        return new EmptyResultDataAccessException(1);
+    }
+
+    private void checkUniqueName(Long id, String name) {
+        if (repository.existsByNameAndIdNot(name, id)) {
+            throw new UniqueFieldException("Product name must be unique", "name", name);
+        }
+    }
 }

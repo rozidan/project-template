@@ -1,9 +1,12 @@
 package com.company.template.server.domain;
 
 import com.company.template.server.domain.model.Product;
+import com.company.template.server.domain.model.Tag;
 import com.company.template.server.domain.model.types.ProductCategory;
 import com.company.template.server.domain.repositories.ProductRepository;
+
 import java.util.Optional;
+import javax.validation.ConstraintViolationException;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,7 +30,7 @@ public class ProductRepositoryTest {
     private ProductRepository repository;
 
     @Test
-    public void findOneShouldSuccessTest() {
+    public void findOneShouldSuccess() {
         Product persist = entityManager.persist(Product.builder()
                 .name("John")
                 .category(ProductCategory.GAME)
@@ -43,4 +46,48 @@ public class ProductRepositoryTest {
         assertThat(product.get().getDesc(), is(equalTo("desc")));
     }
 
+    @Test
+    public void getAverageShouldSuccess() {
+        entityManager.persist(Product.builder()
+                .name("John")
+                .category(ProductCategory.GAME)
+                .unitPrice(100F)
+                .desc("desc")
+                .build());
+        entityManager.persist(Product.builder()
+                .name("Mario")
+                .category(ProductCategory.GAME)
+                .unitPrice(51F)
+                .desc("desc")
+                .build());
+
+        float avg = repository.getAverage();
+        assertThat(avg, is(equalTo(75.5F)));
+    }
+
+    @Test
+    public void existsByNameAndIdNotShouldSuccess() {
+        Product product = entityManager.persist(Product.builder()
+                .name("John")
+                .category(ProductCategory.GAME)
+                .unitPrice(100F)
+                .desc("desc")
+                .build());
+
+        assertTrue(repository.existsByNameAndIdNot("John", product.getId()));
+        assertTrue(repository.existsByNameAndIdNot("John", null));
+    }
+
+    @Test(expected = ConstraintViolationException.class)
+    public void saveProductWithoutNameShouldFailed() {
+        Product product = Product.builder()
+                .category(ProductCategory.GAME)
+                .unitPrice(100F)
+                .desc("desc")
+                .tag(Tag.of("gam", 1))
+                .build();
+
+        repository.save(product);
+        entityManager.flush();
+    }
 }

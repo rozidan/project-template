@@ -1,21 +1,21 @@
 package com.company.template.server.web;
 
-import com.company.template.client.web.dtos.ErrorCodes;
 import com.company.template.client.web.dtos.ProductDto;
+import com.company.template.client.web.dtos.TagDto;
+import com.company.template.client.web.dtos.errors.ErrorCodes;
 import com.company.template.client.web.dtos.types.ProductCategoryDto;
 import com.company.template.server.config.JsonConfiguration;
-import com.company.template.server.domain.model.constraints.ProductNameUnique;
 import com.company.template.server.services.ProductService;
-import com.company.template.server.web.controllers.ProductController;
+import com.company.template.server.web.controllers.CatalogueController;
+import com.company.template.server.web.handlers.exceptions.UniqueFieldException;
 import com.fasterxml.jackson.databind.ObjectWriter;
-import org.hibernate.exception.ConstraintViolationException;
+
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
-import org.springframework.context.annotation.ComponentScan;
-import org.springframework.dao.DataIntegrityViolationException;
+import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.http.MediaType;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringRunner;
@@ -24,20 +24,21 @@ import org.springframework.test.web.servlet.MockMvc;
 import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.is;
 import static org.mockito.Mockito.any;
-import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.doThrow;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.verifyNoMoreInteractions;
 import static org.mockito.Mockito.when;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @RunWith(SpringRunner.class)
-@ComponentScan(basePackageClasses = ProductNameUnique.class)
 @ContextConfiguration(classes = JsonConfiguration.class)
-@WebMvcTest(secure = false, controllers = ProductController.class)
-public class ProductControllerTest {
+@WebMvcTest(secure = false, controllers = CatalogueController.class)
+public class CatalogueControllerTest {
 
     @Autowired
     private ObjectWriter writer;
@@ -54,44 +55,47 @@ public class ProductControllerTest {
                 .name("John")
                 .category(ProductCategoryDto.CLOTHING)
                 .unitPrice(100.0F)
+                .tag(TagDto.of("clo", 2))
                 .build();
 
-        ProductDto result = ProductDto.builder()
-                .id(1L)
-                .name("John")
-                .category(ProductCategoryDto.CLOTHING)
-                .unitPrice(100.0F)
-                .build();
+        when(service.catalogue(any(ProductDto.class))).thenReturn(1L);
 
-        when(service.catalogue(any(ProductDto.class))).thenReturn(result);
-        mvc.perform(post("/products")
+        mvc.perform(post("/catalogue")
                 .content(writer.writeValueAsString(request))
                 .contentType(MediaType.APPLICATION_JSON))
                 .andDo(print())
                 .andExpect(status().isCreated())
-                .andExpect(jsonPath("$.id", is(equalTo(1))))
-                .andExpect(jsonPath("$.name", is(equalTo("John"))))
-                .andExpect(jsonPath("$.desc").doesNotExist())
-                .andExpect(jsonPath("$.unitPrice", is(equalTo(100.0))))
-                .andExpect(jsonPath("$.category", is(equalTo(ProductCategoryDto.CLOTHING.getValue()))));
+                .andExpect(jsonPath("$.productId", is(equalTo(1))));
 
-        verify(service, times(1)).catalogue(any(ProductDto.class));
+        verify(service).catalogue(any(ProductDto.class));
         verifyNoMoreInteractions(service);
-
     }
 
     @Test
-    public void catalogueValidationFailedUniqueName() throws Exception {
+    public void removeNotExistsShouldHandleError() throws Exception {
+        doThrow(new EmptyResultDataAccessException(1)).when(service).remove(1);
+
+        mvc.perform(delete("/catalogue/1")
+                .contentType(MediaType.APPLICATION_JSON))
+                .andDo(print())
+                .andExpect(status().isNotFound());
+
+        verify(service).remove(1);
+        verifyNoMoreInteractions(service);
+    }
+
+    @Test
+    public void catalogUniqueNameShouldHandleError() throws Exception {
         ProductDto request = ProductDto.builder()
                 .name("John")
                 .category(ProductCategoryDto.CLOTHING)
                 .unitPrice(100.0F)
+                .tag(TagDto.of("clo", 2))
                 .build();
 
-        when(service.catalogue(any(ProductDto.class)))
-                .thenThrow(new DataIntegrityViolationException("",
-                        new ConstraintViolationException("", null, ProductNameUnique.CONSTRAINT_NAME)));
-        mvc.perform(post("/products")
+        when(service.catalogue(request)).thenThrow(new UniqueFieldException("bla", "name", "1"));
+
+        mvc.perform(post("/catalogue")
                 .content(writer.writeValueAsString(request))
                 .contentType(MediaType.APPLICATION_JSON))
                 .andDo(print())
@@ -99,21 +103,37 @@ public class ProductControllerTest {
                 .andExpect(jsonPath("$.errorCode", is(equalTo(ErrorCodes.DATA_VALIDATION.toString()))))
                 .andExpect(jsonPath("$.errors").isArray())
                 .andExpect(jsonPath("$.errors[0].fieldName", is(equalTo("name"))))
-                .andExpect(jsonPath("$.errors[0].errorCode", is(equalTo("UNIQUE"))));
+                .andExpect(jsonPath("$.errors[0].errorCode", is(equalTo("UNIQUE"))))
+                .andExpect(jsonPath("$.errors[0].rejectedValue", is(equalTo("1"))));
 
-        verify(service, times(1)).catalogue(any(ProductDto.class));
+        verify(service).catalogue(any(ProductDto.class));
         verifyNoMoreInteractions(service);
     }
 
     @Test
-    public void catalogueValidationFailedWithEmptyName() throws Exception {
+    public void avgPriceSuccess() throws Exception {
+        when(service.getProductPriceAvg()).thenReturn(10.0F);
+
+        mvc.perform(get("/catalogue/avgPrice")
+                .contentType(MediaType.APPLICATION_JSON))
+                .andDo(print())
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.avg", is(equalTo(10.0))));
+
+        verify(service).getProductPriceAvg();
+        verifyNoMoreInteractions(service);
+    }
+
+    @Test
+    public void catalogueEmptyNameShouldFailed() throws Exception {
         ProductDto request = ProductDto.builder()
                 .name("")
                 .category(ProductCategoryDto.CLOTHING)
                 .unitPrice(100.0F)
+                .tag(TagDto.of("clo", 2))
                 .build();
 
-        mvc.perform(post("/products")
+        mvc.perform(post("/catalogue")
                 .content(writer.writeValueAsString(request))
                 .contentType(MediaType.APPLICATION_JSON))
                 .andDo(print())
@@ -130,14 +150,15 @@ public class ProductControllerTest {
     }
 
     @Test
-    public void catalogueValidationFailedWithUnitPriceLowerThen10() throws Exception {
+    public void catalogueUnitPriceLowerThen10ShouldFailed() throws Exception {
         ProductDto request = ProductDto.builder()
                 .name("John")
                 .category(ProductCategoryDto.CLOTHING)
                 .unitPrice(8.5F)
+                .tag(TagDto.of("clo", 2))
                 .build();
 
-        mvc.perform(post("/products")
+        mvc.perform(post("/catalogue")
                 .content(writer.writeValueAsString(request))
                 .contentType(MediaType.APPLICATION_JSON))
                 .andDo(print())
@@ -152,4 +173,6 @@ public class ProductControllerTest {
 
         verifyNoMoreInteractions(service);
     }
+
+
 }

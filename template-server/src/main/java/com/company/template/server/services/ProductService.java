@@ -1,6 +1,7 @@
 package com.company.template.server.services;
 
 import com.company.template.client.web.dtos.ProductDto;
+
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
@@ -9,7 +10,9 @@ import org.springframework.data.domain.Pageable;
  */
 public interface ProductService {
 
-    ProductDto catalogue(ProductDto empDto);
+    long catalogue(ProductDto product);
+
+    void replace(ProductDto product, long id);
 
     Page<ProductDto> fetch(Pageable pageable);
 

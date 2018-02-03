@@ -1,6 +1,7 @@
 package com.company.template.server.config;
 
 import com.company.template.server.TemplateApplication;
+
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;

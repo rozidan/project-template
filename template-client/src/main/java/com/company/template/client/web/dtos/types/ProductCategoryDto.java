@@ -2,6 +2,7 @@ package com.company.template.client.web.dtos.types;
 
 import com.company.template.client.EnumUtils;
 import com.company.template.client.IdentifierType;
+
 import java.util.Objects;
 
 /**

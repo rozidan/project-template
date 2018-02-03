@@ -1,4 +1,4 @@
-package com.company.template.client.web.dtos;
+package com.company.template.client.web.dtos.errors;
 
 /**
  * @author Idan Rozenfeld

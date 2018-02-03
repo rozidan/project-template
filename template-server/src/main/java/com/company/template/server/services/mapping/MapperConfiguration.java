@@ -1,6 +1,7 @@
 package com.company.template.server.services.mapping;
 
 import com.github.rozidan.springboot.modelmapper.ConfigurationConfigurer;
+
 import org.modelmapper.config.Configuration;
 import org.modelmapper.convention.MatchingStrategies;
 import org.springframework.stereotype.Component;
