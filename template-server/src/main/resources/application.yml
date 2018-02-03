@@ -10,7 +10,7 @@ spring:
     throw-exception-if-no-handler-found: true
 
   jackson:
-    default-property-inclusion: non_null
+    default-property-inclusion: non-null
     serialization:
       write-dates-as-timestamps: false
 

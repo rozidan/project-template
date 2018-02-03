@@ -9,8 +9,11 @@ import java.io.Serializable;
 import java.util.Set;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
+
+import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 import lombok.Singular;
 import org.hibernate.validator.constraints.NotEmpty;
 
@@ -19,6 +22,8 @@ import org.hibernate.validator.constraints.NotEmpty;
  */
 @ApiModel("Product")
 @Data
+@NoArgsConstructor
+@AllArgsConstructor
 @Builder
 public class ProductDto implements Serializable {
     private static final long serialVersionUID = 5762617605382814204L;

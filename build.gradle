@@ -12,7 +12,7 @@ subprojects {
     apply from: '../gradle/license.gradle'
 
     ext {
-        springBootVersion = '1.5.9.RELEASE'
+        springBootVersion = '1.5.10.RELEASE'
         springCloudVersion = 'Edgware.RELEASE'
     }
 
