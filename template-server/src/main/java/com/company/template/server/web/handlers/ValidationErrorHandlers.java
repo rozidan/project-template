@@ -24,6 +24,9 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 
 /**
  * @author Idan Rozenfeld
+ *
+ * It is recommended to replace the messages with those
+ * that do not reveal details about the code.
  */
 @Order(Ordered.HIGHEST_PRECEDENCE)
 @RestControllerAdvice
@@ -34,7 +37,7 @@ public class ValidationErrorHandlers {
     @ExceptionHandler(HttpMessageNotReadableException.class)
     public ErrorDto handleNotReadableError(HttpMessageNotReadableException ex) {
         return ErrorDto.builder()
-                .errorCode(ErrorCodes.REQUEST_NOT_READABLE)
+                .errorCode(ErrorCodes.REQUEST_NOT_READABLE.toString())
                 .message(ex.getLocalizedMessage())
                 .build();
     }
@@ -44,7 +47,7 @@ public class ValidationErrorHandlers {
     @ExceptionHandler(UniqueFieldException.class)
     public ErrorDto handleUniqueFieldExceptionError(UniqueFieldException ex) {
         return ErrorDto.builder()
-                .errorCode(ErrorCodes.DATA_VALIDATION)
+                .errorCode(ErrorCodes.DATA_VALIDATION.toString())
                 .error(ValidationErrorDto.builder()
                         .errorCode(ValidationErrorCodes.UNIQUE.toString())
                         .fieldName(ex.getField())
@@ -77,7 +80,7 @@ public class ValidationErrorHandlers {
                 .collect(Collectors.toSet());
 
         return ErrorDto.builder()
-                .errorCode(ErrorCodes.DATA_VALIDATION)
+                .errorCode(ErrorCodes.DATA_VALIDATION.toString())
                 .errors(Collections.unmodifiableSet(errors))
                 .message(ex.getLocalizedMessage())
                 .build();
@@ -97,7 +100,7 @@ public class ValidationErrorHandlers {
     @ExceptionHandler(MissingServletRequestParameterException.class)
     public ErrorDto handleMissingServletRequestParameterError(MissingServletRequestParameterException ex) {
         return ErrorDto.builder()
-                .errorCode(ErrorCodes.MISSING_REQUEST_PARAM)
+                .errorCode(ErrorCodes.MISSING_REQUEST_PARAM.toString())
                 .errors(Collections.singleton(ex.getParameterName()))
                 .message(ex.getLocalizedMessage())
                 .build();

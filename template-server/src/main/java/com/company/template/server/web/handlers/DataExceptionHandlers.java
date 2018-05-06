@@ -14,6 +14,9 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 
 /**
  * @author Idan Rozenfeld
+ *
+ * It is recommended to replace the messages with those
+ * that do not reveal details about the code.
  */
 @Order(Ordered.HIGHEST_PRECEDENCE)
 @RestControllerAdvice
@@ -24,7 +27,7 @@ public class DataExceptionHandlers {
     @ExceptionHandler(EmptyResultDataAccessException.class)
     public ErrorDto handleEmptyResultDataAccessException(EmptyResultDataAccessException ex) {
         return ErrorDto.builder()
-                .errorCode(ErrorCodes.NOT_FOUND)
+                .errorCode(ErrorCodes.NOT_FOUND.toString())
                 .message(ex.getLocalizedMessage())
                 .build();
     }

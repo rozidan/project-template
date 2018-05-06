@@ -19,6 +19,9 @@ import org.springframework.web.servlet.NoHandlerFoundException;
 
 /**
  * @author Idan Rozenfeld
+ *
+ * It is recommended to replace the messages with those
+ * that do not reveal details about the code.
  */
 @Slf4j
 @RestControllerAdvice
@@ -28,7 +31,7 @@ public class GlobalErrorHandlers {
     @ExceptionHandler(MethodArgumentTypeMismatchException.class)
     public ErrorDto handleMethodArgumentTypeMismatchException(MethodArgumentTypeMismatchException ex) {
         return ErrorDto.builder()
-                .errorCode(ErrorCodes.NOT_FOUND)
+                .errorCode(ErrorCodes.NOT_FOUND.toString())
                 .message(ex.getLocalizedMessage())
                 .build();
     }
@@ -37,7 +40,7 @@ public class GlobalErrorHandlers {
     @ExceptionHandler(NoHandlerFoundException.class)
     public ErrorDto handleNoHandlerFoundException(NoHandlerFoundException ex) {
         return ErrorDto.builder()
-                .errorCode(ErrorCodes.NOT_FOUND)
+                .errorCode(ErrorCodes.NOT_FOUND.toString())
                 .message(ex.getLocalizedMessage())
                 .build();
     }
@@ -47,7 +50,7 @@ public class GlobalErrorHandlers {
     @ExceptionHandler(HttpRequestMethodNotSupportedException.class)
     public ErrorDto handleHttpRequestMethodNotSupported(HttpRequestMethodNotSupportedException ex) {
         return ErrorDto.builder()
-                .errorCode(ErrorCodes.METHOD_NOT_ALLOWED)
+                .errorCode(ErrorCodes.METHOD_NOT_ALLOWED.toString())
                 .errors(Collections.singleton(HttpRequestMethodErrorDto.builder()
                         .actualMethod(ex.getMethod())
                         .supportedMethods(ex.getSupportedHttpMethods())
@@ -61,7 +64,7 @@ public class GlobalErrorHandlers {
     @ExceptionHandler(HttpMediaTypeNotSupportedException.class)
     public ErrorDto handleHttpMediaTypeNotSupportedException(HttpMediaTypeNotSupportedException ex) {
         return ErrorDto.builder()
-                .errorCode(ErrorCodes.HTTP_MEDIA_TYPE_NOT_SUPPORTED)
+                .errorCode(ErrorCodes.HTTP_MEDIA_TYPE_NOT_SUPPORTED.toString())
                 .errors(Collections.singleton(HttpMediaTypeErrorDto.builder()
                         .mediaType(ex.getContentType().toString())
                         .build()))
@@ -74,7 +77,7 @@ public class GlobalErrorHandlers {
     public ErrorDto handleGlobalError(Exception ex) {
         log.error("Global error handler exception: ", ex);
         return ErrorDto.builder()
-                .errorCode(ErrorCodes.UNKNOWN)
+                .errorCode(ErrorCodes.UNKNOWN.toString())
                 .message(ex.getLocalizedMessage())
                 .build();
     }
