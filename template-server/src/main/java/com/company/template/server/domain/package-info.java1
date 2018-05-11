@@ -1,7 +1,7 @@
 @TypeDefs({
         @TypeDef(defaultForType = UUID.class, typeClass = UUIDCharType.class)
 })
-package com.ecitele.mercury.orchestrator.resoruce.server.domain;
+package com.company.template.server.domain;
 
 import org.hibernate.annotations.TypeDef;
 import org.hibernate.annotations.TypeDefs;
